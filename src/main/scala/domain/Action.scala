@@ -1,7 +1,7 @@
 package domain
 
-import domain.ActionObjectType._
-import domain.ActionVerb._
+import domain.ObjectType._
+import domain.Verb._
 
 case class Action(id: Option[Int], verb:Verb, objectType:ObjectType, objectUri:String)
 

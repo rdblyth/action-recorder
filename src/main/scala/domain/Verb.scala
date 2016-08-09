@@ -1,6 +1,6 @@
 package domain
 
-object ActionVerb {
+object Verb {
   sealed abstract class Verb(iri: String)
 
   case object MARK_AS_FAVORITE extends Verb("http://activitystrea.ms/schema/1.0/favorite")

@@ -1,5 +1,5 @@
-import domain.ActionObjectType._
-import domain.ActionVerb._
+import domain.ObjectType._
+import domain.Verb._
 import domain.{Action, ActionsRepository, DbConfiguration}
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures

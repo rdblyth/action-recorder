@@ -1,6 +1,6 @@
 package domain
 
-object ActionObjectType {
+object ObjectType {
   sealed abstract class ObjectType(typeIRI: String)
 
   case object ARTICLE extends ObjectType("http://activitystrea.ms/schema/1.0/article")

@@ -8,8 +8,8 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
-import domain.ActionObjectType._
-import domain.ActionVerb._
+import domain.ObjectType._
+import domain.Verb._
 import domain._
 import spray.json._
 
