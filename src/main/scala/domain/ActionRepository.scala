@@ -14,6 +14,8 @@ class ActionsRepository(val dbConfig: DatabaseConfig[JdbcProfile])
     .run(actions returning actions.map(_.id) += action)
     .map(id => action.copy(id = Some(id)))
 
+  def delete(id: Int) = db.run(actions.filter(_.id === id).delete) map { _ > 0 }
+
   def findById(id: Int) = db.run(actions.filter(_.id === id).result.headOption)
 
   def init() = db.run(DBIOAction.seq(actions.schema.create))

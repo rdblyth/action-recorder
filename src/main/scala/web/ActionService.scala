@@ -19,14 +19,15 @@ import scala.util.{Failure, Success}
 trait Protocols extends DefaultJsonProtocol {
   implicit object VerbJsonFormat extends RootJsonFormat[Action] {
     def write(a: Action) = JsObject(
+      "id" -> JsNumber(a.id.get),
       "verb" -> JsString(a.verb),
       "objectType" -> JsString(a.objectType),
       "objectUri" -> JsString(a.objectUri))
 
     def read(value: JsValue) = {
-      value.asJsObject.getFields("verb", "objectType", "objectUri") match {
-        case Seq(JsString(verb), JsString(objectType), JsString(objectUri)) =>
-          Action(None, verb, objectType, objectUri)
+      value.asJsObject.getFields("id", "verb", "objectType", "objectUri") match {
+        case Seq(JsNumber(id), JsString(verb), JsString(objectType), JsString(objectUri)) =>
+          Action(Some(id.toInt), verb, objectType, objectUri)
         case _ => throw new DeserializationException("Action expected")
       }
     }
@@ -61,7 +62,11 @@ trait Service extends Protocols with DbConfiguration {
           }
         } ~
         (delete & path(Segment)) { id =>
-          complete(s"Deleted action $id")
+          onComplete(actionsRepo.delete(id.toInt)) {
+            case Success(true) => complete(StatusCodes.OK, s"Action with id $id was deleted ")
+            case Success(false) => complete(StatusCodes.NotFound, s"No action found with id $id")
+            case Failure(ex) => complete(StatusCodes.InternalServerError, s"An error occurred deleting action with id $id")
+          }
         }
       }
     }
