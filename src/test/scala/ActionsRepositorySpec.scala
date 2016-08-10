@@ -20,16 +20,21 @@ class ActionRepositorySpec extends FlatSpec with DbConfiguration with BeforeAndA
     Await.result(actionsRepo.drop(), timeout)
   }
 
-  "Action" should "be inserted successfully" in {
+  "Action" should "be insertable" in {
     val action = Action(None, MARK_AS_FAVORITE, ARTICLE, "uri")
     actionsRepo.insert(action).futureValue should be(action.copy(id = Some(1)))
   }
 
-  "findById" should "find a row" in {
+  it should "be retrievable by id" in {
     val action = actionsRepo.insert(Action(None, MARK_AS_FAVORITE, ARTICLE, "uri")).futureValue
 
     val maybeAction = actionsRepo.findById(1).futureValue
     maybeAction.isDefined should be(true)
     maybeAction.get should be(action)
+  }
+
+  it should "be deleteable by id" in {
+    val action = actionsRepo.insert(Action(None, MARK_AS_FAVORITE, ARTICLE, "uri")).futureValue
+    actionsRepo.delete(action.id.get).futureValue should be(true)
   }
 }
