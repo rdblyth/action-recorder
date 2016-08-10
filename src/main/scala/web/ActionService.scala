@@ -1,5 +1,8 @@
 package web
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
 import akka.http.scaladsl.Http
@@ -27,7 +30,13 @@ trait Protocols extends DefaultJsonProtocol {
     def read(json: JsValue) : ObjectType =  ObjectType.stringToObjectType(json.compactPrint)
   }
 
-  implicit val actionJsonFormat = jsonFormat4(Action)
+  implicit object DateJsonFormat extends RootJsonFormat[Date] {
+    val dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    def write(d: Date) = JsString(dateFormat.format(d))
+    def read(json: JsValue) : Date = dateFormat.parse(json.compactPrint)
+  }
+
+  implicit val actionJsonFormat = jsonFormat5(Action)
 }
 
 trait Service extends Protocols with DbConfiguration {
