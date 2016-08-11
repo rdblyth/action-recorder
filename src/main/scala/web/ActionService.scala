@@ -50,7 +50,7 @@ trait Service extends Protocols with DbConfiguration {
   val logger: LoggingAdapter
 
   val routes = {
-    logRequestResult("akka-http-microservice") {
+    logRequestResult("actions-service") {
       pathPrefix("action") {
         (get & path(Segment)) { id =>
           onComplete(actionsRepo.findById(id.toInt)) {
