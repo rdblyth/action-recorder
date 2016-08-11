@@ -22,12 +22,12 @@ import scala.util.{Failure, Success}
 trait Protocols extends DefaultJsonProtocol {
   implicit object VerbJsonFormat extends RootJsonFormat[Verb] {
     def write(v: Verb) = JsString(v)
-    def read(json: JsValue) : Verb =  Verb.stringToVerb(json.compactPrint)
+    def read(json: JsValue) : Verb = stringToVerb(json.compactPrint)
   }
 
   implicit object ObjectTypeJsonFormat extends RootJsonFormat[ObjectType] {
     def write(o: ObjectType) = JsString(o)
-    def read(json: JsValue) : ObjectType =  ObjectType.stringToObjectType(json.compactPrint)
+    def read(json: JsValue) : ObjectType = stringToObjectType(json.compactPrint)
   }
 
   implicit object DateJsonFormat extends RootJsonFormat[Date] {
