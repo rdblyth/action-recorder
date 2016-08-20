@@ -54,27 +54,39 @@ trait Service extends Protocols with DbConfiguration with AuditLogger {
     logRequest(auditRequest) {
       pathPrefix("action") {
         (get & path(Segment)) { id =>
-          onComplete(actionsRepo.findById(id.toInt)) {
-            case Success(Some(action)) => complete(action)
-            case Success(None) => complete(StatusCodes.NotFound, s"No action found with id $id")
-            case Failure(ex) => complete(StatusCodes.InternalServerError, s"An error occurred getting action with id $id")
-          }
+          getAction(id)
         } ~
         post {
           parameters("verb", "objectType", "objectUri") { (verb, objectType, objectUri) =>
-            complete {
-              actionsRepo.insert(Action(None, verb, objectType, objectUri))
-            }
+            createAction(verb, objectType, objectUri)
           }
         } ~
         (delete & path(Segment)) { id =>
-          onComplete(actionsRepo.delete(id.toInt)) {
-            case Success(true) => complete(StatusCodes.OK, s"Action with id $id was deleted ")
-            case Success(false) => complete(StatusCodes.NotFound, s"No action found with id $id")
-            case Failure(ex) => complete(StatusCodes.InternalServerError, s"An error occurred deleting action with id $id")
-          }
+          deleteAction(id)
         }
       }
+    }
+  }
+
+  private def getAction(id: String) = {
+    onComplete(actionsRepo.findById(id.toInt)) {
+      case Success(Some(action)) => complete(action)
+      case Success(None) => complete(StatusCodes.NotFound, s"No action found with id $id")
+      case Failure(ex) => complete(StatusCodes.InternalServerError, s"An error occurred getting action with id $id")
+    }
+  }
+
+  private def createAction(verb: String, objectType: String, objectUri: String) = {
+    complete {
+      actionsRepo.insert(Action(None, verb, objectType, objectUri))
+    }
+  }
+
+  private def deleteAction(id: String) = {
+    onComplete(actionsRepo.delete(id.toInt)) {
+      case Success(true) => complete(StatusCodes.OK, s"Action with id $id was deleted ")
+      case Success(false) => complete(StatusCodes.NotFound, s"No action found with id $id")
+      case Failure(ex) => complete(StatusCodes.InternalServerError, s"An error occurred deleting action with id $id")
     }
   }
 }
