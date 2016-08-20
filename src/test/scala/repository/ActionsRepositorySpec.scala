@@ -1,6 +1,8 @@
+package repository
+
 import domain.ObjectTypes._
 import domain.Verbs._
-import domain.{Action, ActionsRepository, DbConfiguration}
+import domain.{Action, DbConfiguration}
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 

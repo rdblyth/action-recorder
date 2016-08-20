@@ -15,6 +15,7 @@ import domain.ObjectType.stringToObjectType
 import domain.Verb.stringToVerb
 import domain._
 import logging.AuditLogger
+import repository.ActionsRepository
 import spray.json._
 
 import scala.concurrent.ExecutionContextExecutor

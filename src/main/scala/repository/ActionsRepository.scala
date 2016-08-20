@@ -1,5 +1,6 @@
-package domain
+package repository
 
+import domain.{Action, ActionsTable, Db}
 import slick.backend.DatabaseConfig
 import slick.dbio.DBIOAction
 import slick.driver.JdbcProfile
@@ -8,6 +9,7 @@ class ActionsRepository(val dbConfig: DatabaseConfig[JdbcProfile])
   extends Db with ActionsTable {
 
   import dbConfig.driver.api._
+
   import scala.concurrent.ExecutionContext.Implicits.global
 
   def insert(action: Action) = db
