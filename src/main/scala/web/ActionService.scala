@@ -11,8 +11,8 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.{Config, ConfigFactory}
-import domain.ObjectType._
-import domain.Verb._
+import domain.ObjectType.stringToObjectType
+import domain.Verb.stringToVerb
 import domain._
 import logging.AuditLogger
 import spray.json._
@@ -21,14 +21,14 @@ import scala.concurrent.ExecutionContextExecutor
 import scala.util.{Failure, Success}
 
 trait Protocols extends DefaultJsonProtocol {
-  implicit object VerbJsonFormat extends RootJsonFormat[Verb] {
-    def write(v: Verb) = JsString(v)
-    def read(json: JsValue) : Verb = stringToVerb(json.compactPrint)
+  implicit object VerbJsonFormat extends RootJsonFormat[Verbs.EnumVal] {
+    def write(v: Verbs.EnumVal) = JsString(v)
+    def read(json: JsValue) : Verbs.EnumVal = stringToVerb(json.compactPrint)
   }
 
-  implicit object ObjectTypeJsonFormat extends RootJsonFormat[ObjectType] {
-    def write(o: ObjectType) = JsString(o)
-    def read(json: JsValue) : ObjectType = stringToObjectType(json.compactPrint)
+  implicit object ObjectTypeJsonFormat extends RootJsonFormat[ObjectTypes.EnumVal] {
+    def write(o: ObjectTypes.EnumVal) = JsString(o)
+    def read(json: JsValue) : ObjectTypes.EnumVal = stringToObjectType(json.compactPrint)
   }
 
   implicit object DateJsonFormat extends RootJsonFormat[Date] {
