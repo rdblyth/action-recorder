@@ -14,6 +14,7 @@ import com.typesafe.config.{Config, ConfigFactory}
 import domain.ObjectType._
 import domain.Verb._
 import domain._
+import logging.AuditLogger
 import spray.json._
 
 import scala.concurrent.ExecutionContextExecutor
@@ -39,7 +40,7 @@ trait Protocols extends DefaultJsonProtocol {
   implicit val actionJsonFormat = jsonFormat5(Action)
 }
 
-trait Service extends Protocols with DbConfiguration {
+trait Service extends Protocols with DbConfiguration with AuditLogger {
   implicit val system: ActorSystem
   implicit def executor: ExecutionContextExecutor
   implicit val materializer: Materializer
@@ -50,7 +51,7 @@ trait Service extends Protocols with DbConfiguration {
   val logger: LoggingAdapter
 
   val routes = {
-    logRequestResult("actions-service") {
+    logRequest(auditRequest) {
       pathPrefix("action") {
         (get & path(Segment)) { id =>
           onComplete(actionsRepo.findById(id.toInt)) {
