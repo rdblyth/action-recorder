@@ -6,7 +6,7 @@ import domain.Verb.{verbToString, stringToVerb}
 trait ActionsTable { this: Db =>
   import dbConfig.driver.api._
 
-  class Actions(tag: Tag) extends Table[Action](tag, "ACTIONS") {
+  class Actions(tag: Tag) extends Table[Action](tag, "ACTION") {
 
     // Columns
     def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
