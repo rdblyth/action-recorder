@@ -20,7 +20,7 @@ import spray.json._
 import scala.concurrent.ExecutionContextExecutor
 import scala.util.{Failure, Success}
 
-trait Protocols extends DefaultJsonProtocol {
+trait JsonProtocols extends DefaultJsonProtocol {
   implicit object VerbJsonFormat extends RootJsonFormat[Verbs.EnumVal] {
     def write(v: Verbs.EnumVal) = JsString(v)
     def read(json: JsValue) : Verbs.EnumVal = stringToVerb(json.compactPrint)
@@ -40,7 +40,7 @@ trait Protocols extends DefaultJsonProtocol {
   implicit val actionJsonFormat = jsonFormat5(Action)
 }
 
-trait Service extends Protocols with DbConfiguration with AuditLogger {
+trait Service extends JsonProtocols with DbConfiguration with AuditLogger {
   implicit val system: ActorSystem
   implicit def executor: ExecutionContextExecutor
   implicit val materializer: Materializer
