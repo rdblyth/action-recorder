@@ -7,7 +7,7 @@ import org.scalatest.concurrent.ScalaFutures
 import scala.concurrent.Await
 import scala.concurrent.duration._
 
-class ActionRepositorySpec extends FlatSpec with DbConfiguration with BeforeAndAfterEach with ScalaFutures with  Matchers {
+class ActionsRepositorySpec extends FlatSpec with DbConfiguration with BeforeAndAfterEach with ScalaFutures with  Matchers {
 
   val timeout = 500 milliseconds
   val actionsRepo = new ActionsRepository(dbConfig)
